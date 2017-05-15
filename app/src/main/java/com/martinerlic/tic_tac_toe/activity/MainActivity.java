@@ -18,7 +18,6 @@ import com.martinerlic.tic_tac_toe.adapter.GridRecyclerAdapter;
 import com.martinerlic.tic_tac_toe.model.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         int numColumns = 3;
         recyclerView.setLayoutManager(new GridLayoutManager(this, numColumns));
-        adapter = new GridRecyclerAdapter(this, adapter, data, numColumns, player1, player2, xPositions, oPositions, playerHint);
+        adapter = new GridRecyclerAdapter(this, data, numColumns, player1, player2, xPositions, oPositions, playerHint);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }

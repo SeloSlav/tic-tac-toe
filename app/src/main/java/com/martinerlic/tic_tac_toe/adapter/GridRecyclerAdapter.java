@@ -1,7 +1,6 @@
 package com.martinerlic.tic_tac_toe.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,10 +15,7 @@ import com.martinerlic.tic_tac_toe.model.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapter.ViewHolder> {
 
@@ -33,14 +29,12 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     private ItemClickListener mClickListener;
     private List<Integer> mXPositions;
     private List<Integer> mOPositions;
-    private GridRecyclerAdapter mAdapter;
     private TextView mPlayerHint;
 
 
     /* Initialize constructor */
-    public GridRecyclerAdapter(Context context, GridRecyclerAdapter adapter, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions, TextView playerHint) {
+    public GridRecyclerAdapter(Context context, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions, TextView playerHint) {
         this.mInflater = LayoutInflater.from(context);
-        this.mAdapter = adapter;
         this.mData = data;
         this.mColumns = numColumns;
         this.mPlayer1 = player1;

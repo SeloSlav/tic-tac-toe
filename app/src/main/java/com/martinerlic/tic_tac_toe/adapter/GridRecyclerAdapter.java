@@ -15,7 +15,10 @@ import com.martinerlic.tic_tac_toe.model.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapter.ViewHolder> {
 
@@ -27,17 +30,20 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     private Context mContext;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private List<Integer> xPositions = new ArrayList<>();
+    private List<Integer> mXPositions;
+    private List<Integer> mOPositions;
 
 
     /* Initialize constructor */
-    public GridRecyclerAdapter(Context context, String[] data, int numColumns, Player player1, Player player2) {
+    public GridRecyclerAdapter(Context context, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.mColumns = numColumns;
         this.mPlayer1 = player1;
         this.mPlayer2 = player2;
         this.mContext = context;
+        this.mXPositions = xPositions;
+        this.mOPositions = oPositions;
     }
 
 
@@ -61,15 +67,62 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         viewHolder.cellTextView.setText(cell);
 
         viewHolder.itemView.setOnClickListener(v -> {
-            viewHolder.checkTurn(position);
-            xPositions.add(viewHolder.getAdapterPosition());
-            checkCompletionConditions();
+            checkTurn(viewHolder, position);
+            checkCompletionConditions(mXPositions, mOPositions);
         });
     }
 
 
-    private void checkCompletionConditions() {
-        // do your checks on xPositions and show the AlertDialog if needed
+    /* Check the current player turn */
+    private void checkTurn(final ViewHolder viewHolder, int position) {
+        if (!(viewHolder.cellTextView.getText().toString().isEmpty())) {
+            Toast.makeText(mContext, "You cannot select this cell!", Toast.LENGTH_SHORT).show();
+        } else {
+            if (mPlayer1.isTurn()) {
+                /* Set cell to "X" */
+                viewHolder.cellTextView.setText(mPlayer1.getTextValue());
+
+                /* Set clicked */
+                viewHolder.cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+                mXPositions.add(position);
+                mOPositions.add(-1);
+                // Toast.makeText(mContext, xPositions.toString(), Toast.LENGTH_SHORT).show();
+
+                /* Prepare next turn */
+                mPlayer1.setTurn(false);
+                mPlayer2.setTurn(true);
+            } else {
+                /* Set cell to "O" */
+                viewHolder.cellTextView.setText(mPlayer2.getTextValue());
+
+                /* Set clicked */
+                viewHolder.cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+                mOPositions.add(position);
+                mXPositions.add(-1);
+                // Toast.makeText(mContext, oPositions.toString(), Toast.LENGTH_SHORT).show();
+
+                /* Prepare next turn */
+                mPlayer1.setTurn(true);
+                mPlayer2.setTurn(false);
+            }
+        }
+    }
+
+
+    private void checkCompletionConditions(List<Integer> mXPositions, List<Integer> mOPositions) {
+        Map<Integer, Integer> map = createMapFromLists(mXPositions, mOPositions);
+        Toast.makeText(mContext, map.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    private Map<Integer, Integer> createMapFromLists(List<Integer> mXPositions, List<Integer> mOPositions) {
+        if (mXPositions.size() != mOPositions.size())
+            throw new IllegalArgumentException("Cannot combine lists with dissimilar sizes!");
+        Map<Integer, Integer> map = new LinkedHashMap<>();
+        for (int i = 0; i < mXPositions.size(); i++) {
+            map.put(mXPositions.get(i), mOPositions.get(i));
+        }
+        return map;
     }
 
 
@@ -89,36 +142,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             cellTextView = (TextView) itemView.findViewById(R.id.textView);
         }
 
-        /* Check the current player turn */
-        private void checkTurn(int position) {
-            if (!(cellTextView.getText().toString().isEmpty())) {
-                Toast.makeText(mContext, "You cannot select this cell!", Toast.LENGTH_SHORT).show();
-            } else {
-                if (mPlayer1.isTurn()) {
-                    /* Set cell to "X" */
-                    cellTextView.setText(mPlayer1.getTextValue());
 
-                    /* Set clicked */
-                    cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-                    Toast.makeText(mContext, xPositions.toString(), Toast.LENGTH_SHORT).show();
-
-                    /* Prepare next turn */
-                    mPlayer1.setTurn(false);
-                    mPlayer2.setTurn(true);
-                } else {
-                    /* Set cell to "O" */
-                    cellTextView.setText(mPlayer2.getTextValue());
-
-                    /* Set clicked */
-                    cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
-                    Toast.makeText(mContext, xPositions.toString(), Toast.LENGTH_SHORT).show();
-
-                    /* Prepare next turn */
-                    mPlayer1.setTurn(true);
-                    mPlayer2.setTurn(false);
-                }
-            }
-        }
 
         @Override
         public void onClick(View itemView) {

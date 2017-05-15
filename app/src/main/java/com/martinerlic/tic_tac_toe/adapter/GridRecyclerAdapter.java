@@ -121,9 +121,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
 
     private void checkCompletionConditions(List<Integer> mXPositions, List<Integer> mOPositions, List<Integer[]> conditionList) {
-        /*Map<Integer, Integer> map = createMapFromLists(mXPositions, mOPositions);
-        Toast.makeText(mContext, map.toString(), Toast.LENGTH_SHORT).show();*/
-
         /* Legend
         * 0: Top-left
         * 1: Top-center
@@ -249,17 +246,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             mPlayerHint.setText(R.string.player_2_turn);
         }
     }
-
-
-    /*private Map<Integer, Integer> createMapFromLists(List<Integer> mXPositions, List<Integer> mOPositions) {
-        if (mXPositions.size() != mOPositions.size())
-            throw new IllegalArgumentException("Cannot combine lists with dissimilar sizes!");
-        Map<Integer, Integer> map = new LinkedHashMap<>();
-        for (int i = 0; i < mXPositions.size(); i++) {
-            map.put(mXPositions.get(i), mOPositions.get(i));
-        }
-        return map;
-    }*/
 
 
     /* Item count */

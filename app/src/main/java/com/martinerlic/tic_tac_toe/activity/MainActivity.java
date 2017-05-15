@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         playerHint = (TextView) findViewById(R.id.playerHint);
 
         /* Create players */
-        player1 = new Player("X", true, 0, false); // textValue, turn?, score, previousWinner?
-        player2 = new Player("O", false, 0, false);
+        player1 = new Player("X", true); // textValue, turn?, score, previousWinner?
+        player2 = new Player("O", false);
 
         /* Initialize RecyclerView */
         initRecyclerView(data);
@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         player2.setTurn(false); // Double-check that Player 2 does not have the inital turn
         playerHint = (TextView) findViewById(R.id.playerHint);
         playerHint.setText(R.string.player_1_turn); // Initialize player turn hint
-
-        // Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getTextValue(), Toast.LENGTH_SHORT).show(); // Some introductory text
-        // Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getTextValue(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -129,9 +126,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         switch (item.getItemId()) {
             /* Reset the game */
             case R.id.reset:
-                initRecyclerView(data);
-                adapter.notifyDataSetChanged();
-                initGameConditions(player1, player2);
+                resetGame();
                 break;
             /* GitHub repository */
             case R.id.info:
@@ -140,6 +135,13 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
                 break;
         }
         return true;
+    }
+
+
+    private void resetGame() {
+        initRecyclerView(data);
+        adapter.notifyDataSetChanged();
+        initGameConditions(player1, player2);
     }
 
 

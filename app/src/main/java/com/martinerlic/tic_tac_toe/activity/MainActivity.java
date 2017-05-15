@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
 
     GridRecyclerAdapter adapter;
     TextView playerHint;
+    public Player player1;
+    public Player player2;
 
 
     @Override
@@ -31,11 +36,11 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         setContentView(R.layout.main_activity);
 
         /* Dummy cell position data */
-        String[] data = {"", "", "", "", "", "", "", "", ""};
+        String[] data = {".", ".", ".", ".", ".", ".", ".", ".", "."};
 
         /* Create players */
-        Player player1 = new Player("X", true, 0, false);
-        Player player2 = new Player("O", false, 0, false);
+        player1 = new Player("X", true, 0, false); // textValue, turn?, score, previousWinner?
+        player2 = new Player("O", false, 0, false);
 
         /* Initialize RecyclerView */
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -49,29 +54,44 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         initGameConditions(player1, player2);
 
         /* Start the game, check for completion conditions, etc. */
+        Toast.makeText(getApplicationContext(), "Let's Play!", Toast.LENGTH_SHORT).show();
         gameLoop(player1, player2);
     }
 
 
     private void initGameConditions(Player player1, Player player2) {
         player1.setTurn(true); // Give initial turn to Player 1
+        player2.setTurn(false); // Double-check that Player 2 does not have the inital turn
         playerHint = (TextView) findViewById(R.id.playerHint);
-        playerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn
-        Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getTextValue(), Toast.LENGTH_LONG).show(); // Some introductory text
-        Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getTextValue(), Toast.LENGTH_LONG).show();
+
+        // Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getTextValue(), Toast.LENGTH_SHORT).show(); // Some introductory text
+        // Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getTextValue(), Toast.LENGTH_SHORT).show();
     }
 
 
     private void gameLoop(Player player1, Player player2) {
-        Toast.makeText(getApplicationContext(), "Let's Play!", Toast.LENGTH_SHORT).show();
-
-
+        if (player1.isTurn()) {
+            playerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn
+        } else {
+            playerHint.setText(R.string.player_2_turn);
+        }
     }
 
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(View itemView, int position) {
         Toast.makeText(getApplicationContext(), adapter.getItem(position), Toast.LENGTH_SHORT).show();
+
+        /* Set the value of the cell depending on which player has a turn */
+        if (player1.isTurn()) {
+            itemView.setOnClickListener(v -> {
+                playerHint.setText(R.string.player_1_turn);
+            });
+        } else {
+            itemView.setOnClickListener(v -> {
+                playerHint.setText(R.string.player_2_turn);
+            });
+        }
     }
 
 
@@ -87,23 +107,25 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
     }
 
 
-    /*private class Player {
-        private com.martinerlic.tic_tac_toe.model.Player player1;
-        private com.martinerlic.tic_tac_toe.model.Player player2;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_settings, menu);
 
-        com.martinerlic.tic_tac_toe.model.Player getPlayer1() {
-            return player1;
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            /* Reset the game */
+            case R.id.reset:
+                initGameConditions(player1, player2);
+                break;
         }
+        return true;
+    }
 
-        com.martinerlic.tic_tac_toe.model.Player getPlayer2() {
-            return player2;
-        }
 
-        Player invoke() {
-            player1 = new com.martinerlic.tic_tac_toe.model.Player("X", true, 0, false);
-            player2 = new com.martinerlic.tic_tac_toe.model.Player("O", false, 0, false);
-
-            return this;
-        }
-    }*/
 }

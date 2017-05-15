@@ -18,6 +18,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     private int mColumns;
     private Player mPlayer1;
     private Player mPlayer2;
+    private Context mContext;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
@@ -29,6 +30,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         this.mColumns = numColumns;
         this.mPlayer1 = player1;
         this.mPlayer2 = player2;
+        this.mContext = context;
     }
 
 
@@ -49,7 +51,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String cell = mData[position];
-        holder.myTextView.setText(cell);
+        holder.cellTextView.setText(cell);
     }
 
 
@@ -62,29 +64,36 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
     /* Store cell views */
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
+        TextView cellTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.textView);
-            /*itemView.setOnClickListener(this);*/
+            cellTextView = (TextView) itemView.findViewById(R.id.textView);
+            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(v -> {
+                if (!(cellTextView.getText().toString().isEmpty() || cellTextView.getText().toString().equals("."))) {
+                    Toast.makeText(mContext, "You cannot select this cell!", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (mPlayer1.isTurn()) {
+                        cellTextView.setText(mPlayer1.getTextValue());
 
-            /* Set the value of the cell depending on which player has a turn */
-            if (mPlayer1.isTurn()) {
-                itemView.setOnClickListener(v -> {
-                    myTextView.setText(mPlayer1.getTextValue());
-                });
-            } else {
-                itemView.setOnClickListener(v -> {
-                    myTextView.setText(mPlayer2.getTextValue());
-                });
-            }
+                    /* Prepare next turn */
+                        mPlayer1.setTurn(false);
+                        mPlayer2.setTurn(true);
+                    } else {
+                        cellTextView.setText(mPlayer2.getTextValue());
+
+                    /* Prepare next turn */
+                        mPlayer2.setTurn(false);
+                        mPlayer1.setTurn(true);
+                    }
+                }
+            });
         }
 
         @Override
-        public void onClick(View view) {
-            /*if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());*/
-
+        public void onClick(View itemView) {
+            if (mClickListener != null) mClickListener.onItemClick(itemView, getAdapterPosition());
         }
     }
 
@@ -103,7 +112,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
     /* Implement method to respond to click events in MainActivity */
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View itemView, int position);
     }
 
 

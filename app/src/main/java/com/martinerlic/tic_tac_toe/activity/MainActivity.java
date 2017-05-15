@@ -60,15 +60,14 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
 
         /* Start the game, check for completion conditions, etc. */
         Toast.makeText(getApplicationContext(), "Let's Play!", Toast.LENGTH_SHORT).show();
-        gameLoop(player1, player2);
     }
 
 
-    private void initRecyclerView(String[] data) {
+    public void initRecyclerView(String[] data) {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         int numColumns = 3;
         recyclerView.setLayoutManager(new GridLayoutManager(this, numColumns));
-        adapter = new GridRecyclerAdapter(this, data, numColumns, player1, player2, xPositions, oPositions);
+        adapter = new GridRecyclerAdapter(this, adapter, data, numColumns, player1, player2, xPositions, oPositions);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
@@ -82,15 +81,6 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
 
         // Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getTextValue(), Toast.LENGTH_SHORT).show(); // Some introductory text
         // Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getTextValue(), Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void gameLoop(Player player1, Player player2) {
-        if (player1.isTurn()) {
-            playerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn
-        } else {
-            playerHint.setText(R.string.player_2_turn);
-        }
     }
 
 

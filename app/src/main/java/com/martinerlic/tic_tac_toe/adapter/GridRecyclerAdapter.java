@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.martinerlic.tic_tac_toe.R;
+import com.martinerlic.tic_tac_toe.activity.MainActivity;
 import com.martinerlic.tic_tac_toe.model.Player;
 
 import java.util.ArrayList;
@@ -32,11 +33,13 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     private ItemClickListener mClickListener;
     private List<Integer> mXPositions;
     private List<Integer> mOPositions;
+    private GridRecyclerAdapter mAdapter;
 
 
     /* Initialize constructor */
-    public GridRecyclerAdapter(Context context, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions) {
+    public GridRecyclerAdapter(Context context, GridRecyclerAdapter adapter, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions) {
         this.mInflater = LayoutInflater.from(context);
+        this.mAdapter = adapter;
         this.mData = data;
         this.mColumns = numColumns;
         this.mPlayer1 = player1;
@@ -66,9 +69,11 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         String cell = mData[position];
         viewHolder.cellTextView.setText(cell);
 
+        List<Integer[]> conditionList = new ArrayList<>();
+
         viewHolder.itemView.setOnClickListener(v -> {
             checkTurn(viewHolder, position);
-            checkCompletionConditions(mXPositions, mOPositions, position);
+            checkCompletionConditions(mXPositions, mOPositions, conditionList);
         });
     }
 
@@ -86,7 +91,9 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 viewHolder.cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 mXPositions.add(position);
                 // mOPositions.add(-1);
-                Toast.makeText(mContext, mXPositions.toString(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(mContext, mXPositions.toString(), Toast.LENGTH_SHORT).show();
+
+                // playerHint.setText(R.string.player_2_turn); // Indicate that it is Player 2's turn next
 
                 /* Prepare next turn */
                 mPlayer1.setTurn(false);
@@ -99,7 +106,9 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 viewHolder.cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                 mOPositions.add(position);
                 // mXPositions.add(-1);
-                Toast.makeText(mContext, mOPositions.toString(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(mContext, mOPositions.toString(), Toast.LENGTH_SHORT).show();
+
+                // playerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn next
 
                 /* Prepare next turn */
                 mPlayer1.setTurn(true);
@@ -109,75 +118,114 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     }
 
 
-    private void checkCompletionConditions(List<Integer> mXPositions, List<Integer> mOPositions, int position) {
+    private void checkCompletionConditions(List<Integer> mXPositions, List<Integer> mOPositions, List<Integer[]> conditionList) {
         /*Map<Integer, Integer> map = createMapFromLists(mXPositions, mOPositions);
         Toast.makeText(mContext, map.toString(), Toast.LENGTH_SHORT).show();*/
 
         /* Legend
-        * 0: top-left
-        * 1: top-center
-        * 2: top-right
-        * 3: middle-left
-        * 4: middle-center
-        * 5: middle-right
-        * 6: bottom-left
-        * 7: bottom-center
-        * 8: bottom-right
+        * 0: Top-left
+        * 1: Top-center
+        * 2: Top-right
+        * 3: Middle-left
+        * 4: Middle-center
+        * 5: Middle-right
+        * 6: Bottom-left
+        * 7: Bottom-center
+        * 8: Bottom-right
         */
 
-        /* Wins
+        /* Win Conditions
+        *
+        * Horizontal Lines
         * Condition 1: 0, 1, 2
-        * Condition 2: 0, 4, 7
-        * Condition 3: 2, 6, 8
-        * Condition 4: 6, 7, 8
-        * Condition 5: 0, 4, 8
+        * Condition 2: 3, 4, 5
+        * Condition 3: 6, 7, 8
+        *
+        * Vertical Lines
+        * Condition 4: 0, 3, 6
+        * Condition 5: 1, 4, 7
+        * Condition 6: 2, 5, 8
+        *
+        * Diagonal Lines
+        * Condition 7: 0, 4, 8
+        * Condition 8: 2, 4, 6
         */
 
-        // TODO: This is a little too brute-force for my liking. I'll have to look up some kind of tic-tac-toe win condition algorithm
+        // TODO: This is a little too brute-force for my liking. It doesn't scale for NxN tic-tac-toe.
+        // TODO: I'll have to think of some kind of tic-tac-toe win condition algorithm
+        /* Define the winning conditions */
         Integer[] condition1 = {0, 1, 2};
-        for (Integer item : condition1) {
-            if (mXPositions.contains(item)) {
+        Integer[] condition2 = {3, 4, 5};
+        Integer[] condition3 = {6, 7, 8};
+
+        Integer[] condition4 = {0, 3, 6};
+        Integer[] condition5 = {1, 4, 7};
+        Integer[] condition6 = {2, 5, 8};
+
+        Integer[] condition7 = {0, 4, 8};
+        Integer[] condition8 = {2, 4, 6};
+
+        /* Add conditions lists to list of lists */
+        conditionList.add(condition1);
+        conditionList.add(condition2);
+        conditionList.add(condition3);
+
+        conditionList.add(condition4);
+        conditionList.add(condition5);
+        conditionList.add(condition6);
+
+        conditionList.add(condition7);
+        conditionList.add(condition8);
+
+        /* Finally, check if a player has won */
+        for (Integer[] conditionItem : conditionList) {
+            if (mXPositions.containsAll(Arrays.asList(conditionItem))) {
                 Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
-            } else if (mOPositions.contains(item)) {
+
+                int size = this.mXPositions.size();
+                if (size > 0) {
+                    for (int i = 0; i < size; i++) {
+                        this.mXPositions.remove(0);
+                    }
+
+                    this.notifyItemRangeRemoved(0, size);
+                }
+
+                startNewGame(mPlayer1, mPlayer2);
+            } else if (mOPositions.containsAll(Arrays.asList(conditionItem))) {
                 Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+
+                int size = this.mOPositions.size();
+                if (size > 0) {
+                    for (int i = 0; i < size; i++) {
+                        this.mOPositions.remove(0);
+                    }
+
+                    this.notifyItemRangeRemoved(0, size);
+                }
+
+                startNewGame(mPlayer2, mPlayer1);
+            } else {
+                // If there are no more empty itemViews left, and the above conditions do not hold, show a draw
+                /*if () {
+                    Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+
+                    if (mPlayer1.isTurn()) {
+                        startNewGame(mPlayer2, mPlayer1);
+                    } else {
+                        startNewGame(mPlayer1, mPlayer2);
+                    }
+                }*/
+
             }
         }
 
-        Integer[] condition2 = {0, 4, 7};
-        for (Integer item : condition2) {
-            if (mXPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
-            } else if (mOPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
-            }
-        }
+    }
 
-        Integer[] condition3 = {2, 6, 8};
-        for (Integer item : condition3) {
-            if (mXPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
-            } else if (mOPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
-            }
-        }
 
-        Integer[] condition4 = {6, 7, 8};
-        for (Integer item : condition4) {
-            if (mXPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
-            } else if (mOPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        Integer[] condition5 = {0, 4, 8};
-        for (Integer item : condition5) {
-            if (mXPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
-            } else if (mOPositions.contains(item)) {
-                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
-            }
-        }
+    /* Select the player to start the new game, then wipe the board! */
+    private void startNewGame(Player playerToStart, Player nextPlayer) {
+        ((MainActivity) mContext).initRecyclerView(mData);
 
     }
 

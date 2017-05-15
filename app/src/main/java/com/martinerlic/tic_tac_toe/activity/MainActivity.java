@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
     public List<Integer> oPositions = new ArrayList<>();
 
 
-    /* Dummy cell position data */
+    /* Initial cell text */
     String[] data = {"", "", "", "", "", "", "", "", ""};
 
 
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
 
         /* Set layout */
         setContentView(R.layout.main_activity);
+
+        playerHint = (TextView) findViewById(R.id.playerHint);
 
         /* Create players */
         player1 = new Player("X", true, 0, false); // textValue, turn?, score, previousWinner?
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         int numColumns = 3;
         recyclerView.setLayoutManager(new GridLayoutManager(this, numColumns));
-        adapter = new GridRecyclerAdapter(this, adapter, data, numColumns, player1, player2, xPositions, oPositions);
+        adapter = new GridRecyclerAdapter(this, adapter, data, numColumns, player1, player2, xPositions, oPositions, playerHint);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }

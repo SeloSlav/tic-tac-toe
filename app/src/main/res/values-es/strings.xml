@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Qwic Tac Toe</string>
     <string name="turn_hint">Insinuación</string>
-    <string name="player_1_turn">Es Jugador 1 Turno (X)</string>
-    <string name="player_2_turn">Es Jugador 2 Turno (O)</string>
+    <string name="player_1_turn">Es \"X\" Turno</string>
+    <string name="player_2_turn">Es \"O\" Turno</string>
     <string name="reset_all">Resetear Todo</string>
     <string name="info">Información</string>
-    <string name="player_1_wins">¡Jugador 1 Gana!</string>
-    <string name="player_2_wins">¡Jugador 2 Gana!</string>
+    <string name="player_1_wins">¡X Gana!</string>
+    <string name="player_2_wins">¡\"O\" Gana!</string>
 </resources>

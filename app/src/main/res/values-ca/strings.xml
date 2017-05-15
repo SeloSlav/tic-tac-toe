@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Qwic Tac Toe</string>
     <string name="info">Informació</string>
-    <string name="player_1_turn">Al Seu Torn del Jugador 1 (X)</string>
-    <string name="player_2_turn">Al Seu Torn del Jugador 2 (O)</string>
+    <string name="player_1_turn">Al Seu Torn del \"X\"</string>
+    <string name="player_2_turn">Al Seu Torn del \"O\"</string>
     <string name="reset_all">Restablir Tots</string>
     <string name="turn_hint">Pista</string>
-    <string name="player_1_wins">Jugador 1 Guanya!</string>
-    <string name="player_2_wins">Jugador 2 Guanya!</string>
+    <string name="player_1_wins">\"X\" Guanya!</string>
+    <string name="player_2_wins">\"O\" Guanya!</string>
 </resources>

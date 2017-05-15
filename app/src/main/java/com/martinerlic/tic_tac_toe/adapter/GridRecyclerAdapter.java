@@ -34,10 +34,11 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     private List<Integer> mXPositions;
     private List<Integer> mOPositions;
     private GridRecyclerAdapter mAdapter;
+    private TextView mPlayerHint;
 
 
     /* Initialize constructor */
-    public GridRecyclerAdapter(Context context, GridRecyclerAdapter adapter, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions) {
+    public GridRecyclerAdapter(Context context, GridRecyclerAdapter adapter, String[] data, int numColumns, Player player1, Player player2, List<Integer> xPositions, List<Integer> oPositions, TextView playerHint) {
         this.mInflater = LayoutInflater.from(context);
         this.mAdapter = adapter;
         this.mData = data;
@@ -47,6 +48,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         this.mContext = context;
         this.mXPositions = xPositions;
         this.mOPositions = oPositions;
+        this.mPlayerHint = playerHint;
     }
 
 
@@ -93,7 +95,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 // mOPositions.add(-1);
                 // Toast.makeText(mContext, mXPositions.toString(), Toast.LENGTH_SHORT).show();
 
-                // playerHint.setText(R.string.player_2_turn); // Indicate that it is Player 2's turn next
+                mPlayerHint.setText(R.string.player_2_turn); // Indicate that it is Player 2's turn next
 
                 /* Prepare next turn */
                 mPlayer1.setTurn(false);
@@ -108,7 +110,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 // mXPositions.add(-1);
                 // Toast.makeText(mContext, mOPositions.toString(), Toast.LENGTH_SHORT).show();
 
-                // playerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn next
+                mPlayerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn next
 
                 /* Prepare next turn */
                 mPlayer1.setTurn(true);
@@ -182,27 +184,15 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             if (mXPositions.containsAll(Arrays.asList(conditionItem))) {
                 Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
 
-                int size = this.mXPositions.size();
-                if (size > 0) {
-                    for (int i = 0; i < size; i++) {
-                        this.mXPositions.remove(0);
-                    }
-
-                    this.notifyItemRangeRemoved(0, size);
-                }
+                clearXValues();
+                clearOValues();
 
                 startNewGame(mPlayer1, mPlayer2);
             } else if (mOPositions.containsAll(Arrays.asList(conditionItem))) {
                 Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
 
-                int size = this.mOPositions.size();
-                if (size > 0) {
-                    for (int i = 0; i < size; i++) {
-                        this.mOPositions.remove(0);
-                    }
-
-                    this.notifyItemRangeRemoved(0, size);
-                }
+                clearXValues();
+                clearOValues();
 
                 startNewGame(mPlayer2, mPlayer1);
             } else {
@@ -220,6 +210,30 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             }
         }
 
+    }
+
+
+    private void clearOValues() {
+        int size = this.mOPositions.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                this.mOPositions.remove(0);
+            }
+
+            this.notifyItemRangeRemoved(0, size);
+        }
+    }
+
+
+    private void clearXValues() {
+        int size = this.mXPositions.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                this.mXPositions.remove(0);
+            }
+
+            this.notifyItemRangeRemoved(0, size);
+        }
     }
 
 

@@ -13,14 +13,16 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
 
     private String[] mData = new String[0];
+    private int mColumns;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
 
     /* Initialize constructor */
-    public GridRecyclerAdapter(Context context, String[] data) {
+    public GridRecyclerAdapter(Context context, String[] data, int numColumns) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.mColumns = numColumns;
     }
 
 
@@ -30,7 +32,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
 
         /* Set minimum height of each cell by the number of rows in the grid */
-        int height = parent.getMeasuredHeight() / 3;
+        int height = parent.getMeasuredHeight() / mColumns;
         itemView.setMinimumHeight(height);
 
         return new ViewHolder(itemView);
@@ -85,4 +87,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
+
+
 }

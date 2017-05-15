@@ -6,4 +6,6 @@
     <string name="player_2_turn">Es Jugador 2 Turno (O)</string>
     <string name="reset_all">Resetear Todo</string>
     <string name="info">Información</string>
+    <string name="player_1_wins">¡Jugador 1 Gana!</string>
+    <string name="player_2_wins">¡Jugador 2 Gana!</string>
 </resources>

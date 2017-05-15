@@ -125,11 +125,64 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         * 8: bottom-right
         */
 
-        if (mXPositions.contains(0));
+        /* Wins
+        * Condition 1: 0, 1, 2
+        * Condition 2: 0, 4, 7
+        * Condition 3: 2, 6, 8
+        * Condition 4: 6, 7, 8
+        * Condition 5: 0, 4, 8
+        */
+
+        // TODO: This is a little too brute-force for my liking. I'll have to look up some kind of tic-tac-toe win condition algorithm
+        Integer[] condition1 = {0, 1, 2};
+        for (Integer item : condition1) {
+            if (mXPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
+            } else if (mOPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        Integer[] condition2 = {0, 4, 7};
+        for (Integer item : condition2) {
+            if (mXPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
+            } else if (mOPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        Integer[] condition3 = {2, 6, 8};
+        for (Integer item : condition3) {
+            if (mXPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
+            } else if (mOPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        Integer[] condition4 = {6, 7, 8};
+        for (Integer item : condition4) {
+            if (mXPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
+            } else if (mOPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        Integer[] condition5 = {0, 4, 8};
+        for (Integer item : condition5) {
+            if (mXPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_1_wins, Toast.LENGTH_SHORT).show();
+            } else if (mOPositions.contains(item)) {
+                Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
 
-    private Map<Integer, Integer> createMapFromLists(List<Integer> mXPositions, List<Integer> mOPositions) {
+    /*private Map<Integer, Integer> createMapFromLists(List<Integer> mXPositions, List<Integer> mOPositions) {
         if (mXPositions.size() != mOPositions.size())
             throw new IllegalArgumentException("Cannot combine lists with dissimilar sizes!");
         Map<Integer, Integer> map = new LinkedHashMap<>();
@@ -137,7 +190,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             map.put(mXPositions.get(i), mOPositions.get(i));
         }
         return map;
-    }
+    }*/
 
 
     /* Item count */
@@ -155,7 +208,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             super(itemView);
             cellTextView = (TextView) itemView.findViewById(R.id.textView);
         }
-
 
 
         @Override

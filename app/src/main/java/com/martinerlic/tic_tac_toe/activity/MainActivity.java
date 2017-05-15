@@ -28,16 +28,18 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements GridRecyclerAdapter.ItemClickListener {
 
 
-    GridRecyclerAdapter adapter;
-    TextView playerHint;
+    public GridRecyclerAdapter adapter;
+    public TextView playerHint;
     public Player player1;
     public Player player2;
-    RecyclerView recyclerView;
-    private List<Integer> xPositions = new ArrayList<>(Collections.nCopies(9, 0));
-    private List<Integer> oPositions = new ArrayList<>(Collections.nCopies(9, 0));
+    public RecyclerView recyclerView;
+    public List<Integer> xPositions = new ArrayList<>();
+    public List<Integer> oPositions = new ArrayList<>();
+
 
     /* Dummy cell position data */
     String[] data = {"", "", "", "", "", "", "", "", ""};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,5 +1,7 @@
 package com.martinerlic.tic_tac_toe.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -122,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
             /* Reset the game */
             case R.id.reset:
                 initGameConditions(player1, player2);
+                break;
+            /* GitHub repository */
+            case R.id.info:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/santafebound/tic-tac-toe/blob/master/README.md"));
+                startActivity(browserIntent);
                 break;
         }
         return true;

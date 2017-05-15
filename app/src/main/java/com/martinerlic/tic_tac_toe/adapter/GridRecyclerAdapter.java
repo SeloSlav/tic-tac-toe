@@ -240,7 +240,14 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     /* Select the player to start the new game, then wipe the board! */
     private void startNewGame(Player playerToStart, Player nextPlayer) {
         ((MainActivity) mContext).initRecyclerView(mData);
+        playerToStart.setTurn(true);
+        nextPlayer.setTurn(false);
 
+        if (playerToStart.getTextValue().equals("X")) {
+            mPlayerHint.setText(R.string.player_1_turn);
+        } else {
+            mPlayerHint.setText(R.string.player_2_turn);
+        }
     }
 
 
@@ -256,27 +263,27 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
 
     /* Item count */
-    @Override
-    public int getItemCount() {
-        return mData.length;
-    }
+        @Override
+        public int getItemCount() {
+            return mData.length;
+        }
 
 
     /* Store cell views */
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView cellTextView;
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            TextView cellTextView;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            cellTextView = (TextView) itemView.findViewById(R.id.textView);
+            ViewHolder(View itemView) {
+                super(itemView);
+                cellTextView = (TextView) itemView.findViewById(R.id.textView);
+            }
+
+
+            @Override
+            public void onClick(View itemView) {
+                if (mClickListener != null) mClickListener.onItemClick(itemView, getAdapterPosition());
+            }
         }
-
-
-        @Override
-        public void onClick(View itemView) {
-            if (mClickListener != null) mClickListener.onItemClick(itemView, getAdapterPosition());
-        }
-    }
 
 
     /* Get data at click position */

@@ -13,16 +13,22 @@ import android.widget.Toast;
 import com.martinerlic.tic_tac_toe.R;
 import com.martinerlic.tic_tac_toe.model.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapter.ViewHolder> {
 
 
-    private String[] mData = new String[0];
+    private String[] mData;
     private int mColumns;
     private Player mPlayer1;
     private Player mPlayer2;
     private Context mContext;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private List<Integer> xPositions = new ArrayList<>();
+
 
     /* Initialize constructor */
     public GridRecyclerAdapter(Context context, String[] data, int numColumns, Player player1, Player player2) {
@@ -50,9 +56,20 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
     /* Bind data to TextView */
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         String cell = mData[position];
         viewHolder.cellTextView.setText(cell);
+
+        viewHolder.itemView.setOnClickListener(v -> {
+            viewHolder.checkTurn(position);
+            xPositions.add(viewHolder.getAdapterPosition());
+            checkCompletionConditions();
+        });
+    }
+
+
+    private void checkCompletionConditions() {
+        // do your checks on xPositions and show the AlertDialog if needed
     }
 
 
@@ -70,21 +87,11 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         ViewHolder(View itemView) {
             super(itemView);
             cellTextView = (TextView) itemView.findViewById(R.id.textView);
-            itemView.setOnClickListener(this);
-            itemView.setOnClickListener(v -> {
-                checkTurn();
-                checkCompletionConditions();
-            });
-        }
-
-        /* Check to see if there is a winner */
-        private void checkCompletionConditions() {
-
         }
 
         /* Check the current player turn */
-        private void checkTurn() {
-            if (!(cellTextView.getText().toString().isEmpty() || cellTextView.getText().toString().equals("."))) {
+        private void checkTurn(int position) {
+            if (!(cellTextView.getText().toString().isEmpty())) {
                 Toast.makeText(mContext, "You cannot select this cell!", Toast.LENGTH_SHORT).show();
             } else {
                 if (mPlayer1.isTurn()) {
@@ -93,6 +100,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
                     /* Set clicked */
                     cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+                    Toast.makeText(mContext, xPositions.toString(), Toast.LENGTH_SHORT).show();
 
                     /* Prepare next turn */
                     mPlayer1.setTurn(false);
@@ -103,6 +111,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
                     /* Set clicked */
                     cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+                    Toast.makeText(mContext, xPositions.toString(), Toast.LENGTH_SHORT).show();
 
                     /* Prepare next turn */
                     mPlayer1.setTurn(true);

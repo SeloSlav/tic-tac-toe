@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
     RecyclerView recyclerView;
 
     /* Dummy cell position data */
-    String[] data = {".", ".", ".", ".", ".", ".", ".", ".", "."};
+    String[] data = {"", "", "", "", "", "", "", "", ""};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

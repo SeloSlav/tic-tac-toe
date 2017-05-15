@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.martinerlic.tic_tac_toe.R;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
 
 
     GridRecyclerAdapter adapter;
+    TextView playerHint;
 
 
     @Override
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         setContentView(R.layout.main_activity);
 
         /* Dummy cell position data */
-        String[] data = {".", ".", ".", ".", ".", ".", ".", ".", "."};
+        String[] data = {"", "", "", "", "", "", "", "", ""};
 
         /* Initialize RecyclerView */
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -38,19 +40,28 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        /* Create players */
         Player player1 = new Player().invoke();
         Player player2 = new Player().invoke();
 
-        /* Give initial turn to Player 1 */
-        player1.getPlayer1().setTurn(true);
+        /* Set initial game conditions */
+        initGameConditions(player1, player2);
 
         gameLoop(player1, player2);
     }
 
 
-    private void gameLoop(Player player1, Player player2) {
+    private void initGameConditions(Player player1, Player player2) {
+        player1.getPlayer1().setTurn(true); // Give initial turn to Player 1
+        playerHint = (TextView) findViewById(R.id.playerHint);
+        playerHint.setText(R.string.player_1_turn); // Indicate that it is Player 1's turn
         Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getPlayer1().getTextValue(), Toast.LENGTH_LONG).show();
         Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getPlayer2().getTextValue(), Toast.LENGTH_LONG).show();
+    }
+
+
+    private void gameLoop(Player player1, Player player2) {
+
     }
 
 

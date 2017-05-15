@@ -1,6 +1,8 @@
 package com.martinerlic.tic_tac_toe.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     private Context mContext;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-
 
     /* Initialize constructor */
     public GridRecyclerAdapter(Context context, String[] data, int numColumns, Player player1, Player player2) {
@@ -49,9 +50,9 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
     /* Bind data to TextView */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         String cell = mData[position];
-        holder.cellTextView.setText(cell);
+        viewHolder.cellTextView.setText(cell);
     }
 
 
@@ -71,24 +72,43 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             cellTextView = (TextView) itemView.findViewById(R.id.textView);
             itemView.setOnClickListener(this);
             itemView.setOnClickListener(v -> {
-                if (!(cellTextView.getText().toString().isEmpty() || cellTextView.getText().toString().equals("."))) {
-                    Toast.makeText(mContext, "You cannot select this cell!", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (mPlayer1.isTurn()) {
-                        cellTextView.setText(mPlayer1.getTextValue());
-
-                    /* Prepare next turn */
-                        mPlayer1.setTurn(false);
-                        mPlayer2.setTurn(true);
-                    } else {
-                        cellTextView.setText(mPlayer2.getTextValue());
-
-                    /* Prepare next turn */
-                        mPlayer2.setTurn(false);
-                        mPlayer1.setTurn(true);
-                    }
-                }
+                checkTurn();
+                checkCompletionConditions();
             });
+        }
+
+        /* Check to see if there is a winner */
+        private void checkCompletionConditions() {
+
+        }
+
+        /* Check the current player turn */
+        private void checkTurn() {
+            if (!(cellTextView.getText().toString().isEmpty() || cellTextView.getText().toString().equals("."))) {
+                Toast.makeText(mContext, "You cannot select this cell!", Toast.LENGTH_SHORT).show();
+            } else {
+                if (mPlayer1.isTurn()) {
+                    /* Set cell to "X" */
+                    cellTextView.setText(mPlayer1.getTextValue());
+
+                    /* Set clicked */
+                    cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+
+                    /* Prepare next turn */
+                    mPlayer1.setTurn(false);
+                    mPlayer2.setTurn(true);
+                } else {
+                    /* Set cell to "O" */
+                    cellTextView.setText(mPlayer2.getTextValue());
+
+                    /* Set clicked */
+                    cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+
+                    /* Prepare next turn */
+                    mPlayer1.setTurn(true);
+                    mPlayer2.setTurn(false);
+                }
+            }
         }
 
         @Override

@@ -28,7 +28,10 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
     TextView playerHint;
     public Player player1;
     public Player player2;
+    RecyclerView recyclerView;
 
+    /* Dummy cell position data */
+    String[] data = {".", ".", ".", ".", ".", ".", ".", ".", "."};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +40,12 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         /* Set layout */
         setContentView(R.layout.main_activity);
 
-        /* Dummy cell position data */
-        String[] data = {".", ".", ".", ".", ".", ".", ".", ".", "."};
-
         /* Create players */
         player1 = new Player("X", true, 0, false); // textValue, turn?, score, previousWinner?
         player2 = new Player("O", false, 0, false);
 
         /* Initialize RecyclerView */
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        int numColumns = 3;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, numColumns));
-        adapter = new GridRecyclerAdapter(this, data, numColumns, player1, player2);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        initRecyclerView(data);
 
         /* Set initial game conditions */
         initGameConditions(player1, player2);
@@ -61,10 +56,21 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
     }
 
 
+    private void initRecyclerView(String[] data) {
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        int numColumns = 3;
+        recyclerView.setLayoutManager(new GridLayoutManager(this, numColumns));
+        adapter = new GridRecyclerAdapter(this, data, numColumns, player1, player2);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+    }
+
+
     private void initGameConditions(Player player1, Player player2) {
         player1.setTurn(true); // Give initial turn to Player 1
         player2.setTurn(false); // Double-check that Player 2 does not have the inital turn
         playerHint = (TextView) findViewById(R.id.playerHint);
+        playerHint.setText(R.string.player_1_turn); // Initialize player turn hint
 
         // Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getTextValue(), Toast.LENGTH_SHORT).show(); // Some introductory text
         // Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getTextValue(), Toast.LENGTH_SHORT).show();
@@ -89,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
             itemView.setOnClickListener(v -> {
                 playerHint.setText(R.string.player_1_turn);
             });
-        } else {
+        } else if (player2.isTurn()) {
             itemView.setOnClickListener(v -> {
                 playerHint.setText(R.string.player_2_turn);
             });
@@ -123,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         switch (item.getItemId()) {
             /* Reset the game */
             case R.id.reset:
+                initRecyclerView(data);
+                adapter.notifyDataSetChanged();
                 initGameConditions(player1, player2);
                 break;
             /* GitHub repository */

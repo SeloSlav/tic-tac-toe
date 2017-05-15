@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Qwic Tac Toe</string>
     <string name="turn_hint">Insinuación</string>
-    <string name="player_1_turn">Es Jugador 1 Turno</string>
-    <string name="player_2_turn">Es Jugador 2 Turno</string>
+    <string name="player_1_turn">Es Jugador 1 Turno (X)</string>
+    <string name="player_2_turn">Es Jugador 2 Turno (O)</string>
     <string name="reset_all">Resetear Todo</string>
     <string name="info">Información</string>
 </resources>

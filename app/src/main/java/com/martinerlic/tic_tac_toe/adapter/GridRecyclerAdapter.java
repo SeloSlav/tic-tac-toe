@@ -68,7 +68,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
         viewHolder.itemView.setOnClickListener(v -> {
             checkTurn(viewHolder, position);
-            checkCompletionConditions(mXPositions, mOPositions);
+            checkCompletionConditions(mXPositions, mOPositions, position);
         });
     }
 
@@ -85,8 +85,8 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 /* Set clicked */
                 viewHolder.cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
                 mXPositions.add(position);
-                mOPositions.add(-1);
-                // Toast.makeText(mContext, xPositions.toString(), Toast.LENGTH_SHORT).show();
+                // mOPositions.add(-1);
+                Toast.makeText(mContext, mXPositions.toString(), Toast.LENGTH_SHORT).show();
 
                 /* Prepare next turn */
                 mPlayer1.setTurn(false);
@@ -98,8 +98,8 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 /* Set clicked */
                 viewHolder.cellTextView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
                 mOPositions.add(position);
-                mXPositions.add(-1);
-                // Toast.makeText(mContext, oPositions.toString(), Toast.LENGTH_SHORT).show();
+                // mXPositions.add(-1);
+                Toast.makeText(mContext, mOPositions.toString(), Toast.LENGTH_SHORT).show();
 
                 /* Prepare next turn */
                 mPlayer1.setTurn(true);
@@ -109,9 +109,23 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     }
 
 
-    private void checkCompletionConditions(List<Integer> mXPositions, List<Integer> mOPositions) {
-        Map<Integer, Integer> map = createMapFromLists(mXPositions, mOPositions);
-        Toast.makeText(mContext, map.toString(), Toast.LENGTH_SHORT).show();
+    private void checkCompletionConditions(List<Integer> mXPositions, List<Integer> mOPositions, int position) {
+        /*Map<Integer, Integer> map = createMapFromLists(mXPositions, mOPositions);
+        Toast.makeText(mContext, map.toString(), Toast.LENGTH_SHORT).show();*/
+
+        /* Legend
+        * 0: top-left
+        * 1: top-center
+        * 2: top-right
+        * 3: middle-left
+        * 4: middle-center
+        * 5: middle-right
+        * 6: bottom-left
+        * 7: bottom-center
+        * 8: bottom-right
+        */
+
+        if (mXPositions.contains(0));
     }
 
 

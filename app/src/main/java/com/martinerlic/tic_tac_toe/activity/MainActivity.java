@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.martinerlic.tic_tac_toe.R;
 import com.martinerlic.tic_tac_toe.adapter.GridRecyclerAdapter;
-import com.martinerlic.tic_tac_toe.model.Player;
 
 /**
  * Created by mnxe on 5/15/2017.
@@ -40,16 +38,19 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
-        initPlayers();
+        Player player1 = new Player().invoke();
+        Player player2 = new Player().invoke();
+
+        /* Give initial turn to Player 1 */
+        player1.getPlayer1().setTurn(true);
+
+        gameLoop(player1, player2);
     }
 
 
-    private void initPlayers() {
-        Player player1 = new Player("X", true, 0, false); // textValue, turn?, score, previousWinner?
-        Player player2 = new Player("O", false, 0, false);
-
-        Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getTextValue(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getTextValue(), Toast.LENGTH_LONG).show();
+    private void gameLoop(Player player1, Player player2) {
+        Toast.makeText(getApplicationContext(), "Player 1 is " + player1.getPlayer1().getTextValue(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Player 2 is " + player2.getPlayer2().getTextValue(), Toast.LENGTH_LONG).show();
     }
 
 
@@ -71,4 +72,23 @@ public class MainActivity extends AppCompatActivity implements GridRecyclerAdapt
     }
 
 
+    private class Player {
+        private com.martinerlic.tic_tac_toe.model.Player player1;
+        private com.martinerlic.tic_tac_toe.model.Player player2;
+
+        com.martinerlic.tic_tac_toe.model.Player getPlayer1() {
+            return player1;
+        }
+
+        com.martinerlic.tic_tac_toe.model.Player getPlayer2() {
+            return player2;
+        }
+
+        Player invoke() {
+            player1 = new com.martinerlic.tic_tac_toe.model.Player("X", true, 0, false);
+            player2 = new com.martinerlic.tic_tac_toe.model.Player("O", false, 0, false);
+
+            return this;
+        }
+    }
 }

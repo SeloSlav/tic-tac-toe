@@ -4,15 +4,23 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/playerHint"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/player_hint_topMargin"
+        android:height="@dimen/player_hint_topMargin"
+        android:background="@color/white"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
         android:text="@string/turn_hint"
-        android:textColor="@color/stroke" />
+        android:textAlignment="center"
+        android:textColor="@color/stroke"
+        android:textSize="@dimen/player_hint_title" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/playerHint"
         android:orientation="horizontal" />
 
 </RelativeLayout>

@@ -20,6 +20,7 @@ import java.util.List;
 public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapter.ViewHolder> {
 
 
+    /* Globals */
     private String[] mData;
     private int mColumns;
     private Player mPlayer1;
@@ -144,8 +145,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         * Condition 8: 2, 4, 6
         */
 
-        // TODO: This is a little too brute-force for my liking. It doesn't scale for NxN tic-tac-toe.
-        // TODO: I'll have to think of some kind of tic-tac-toe win condition algorithm
         /* Define the winning conditions */
         Integer[] condition1 = {0, 1, 2};
         Integer[] condition2 = {3, 4, 5};
@@ -179,7 +178,8 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                 clearOValues();
 
                 startNewGame(mPlayer1, mPlayer2);
-            } else if (mOPositions.containsAll(Arrays.asList(conditionItem))) {
+            } else //noinspection StatementWithEmptyBody
+                if (mOPositions.containsAll(Arrays.asList(conditionItem))) {
                 Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
 
                 clearXValues();
@@ -187,9 +187,12 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
                 startNewGame(mPlayer2, mPlayer1);
             } else {
-                // If there are no more empty itemViews left, and the above conditions do not hold, show a draw
+                // TODO: Tie-condition. If there are no more empty itemViews left, and the above conditions do not hold, show a draw
                 /*if () {
                     Toast.makeText(mContext, R.string.player_2_wins, Toast.LENGTH_SHORT).show();
+
+                    clearXValues();
+                    clearOValues();
 
                     if (mPlayer1.isTurn()) {
                         startNewGame(mPlayer2, mPlayer1);
@@ -243,27 +246,27 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
 
     /* Item count */
-        @Override
-        public int getItemCount() {
-            return mData.length;
-        }
+    @Override
+    public int getItemCount() {
+        return mData.length;
+    }
 
 
     /* Store cell views */
-        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            TextView cellTextView;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView cellTextView;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                cellTextView = (TextView) itemView.findViewById(R.id.textView);
-            }
-
-
-            @Override
-            public void onClick(View itemView) {
-                if (mClickListener != null) mClickListener.onItemClick(itemView, getAdapterPosition());
-            }
+        ViewHolder(View itemView) {
+            super(itemView);
+            cellTextView = (TextView) itemView.findViewById(R.id.textView);
         }
+
+
+        @Override
+        public void onClick(View itemView) {
+            if (mClickListener != null) mClickListener.onItemClick(itemView, getAdapterPosition());
+        }
+    }
 
 
     /* Get data at click position */
